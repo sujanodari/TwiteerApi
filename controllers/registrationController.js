@@ -58,7 +58,7 @@ function registrationValidation(req,res,next){
                         }
                         })
                         .catch(function(err){
-                            console.log(err);
+                            console.log("me");
                         });
                 }
                
@@ -86,6 +86,7 @@ function registrationValidation(req,res,next){
                     
                     })
                     .catch(function(err){
+                       
                         console.log(err);
                     });
                 }
@@ -94,6 +95,7 @@ function registrationValidation(req,res,next){
         
         })
         .catch(function(err){
+            
             console.log(err);
         });
             }
@@ -151,8 +153,9 @@ function registerUser(req,res,next){
                 })
                 .then(function(result){
                 res.json({
-                    status:201,
-                    messsage:"User is Registered"
+                    status:"201",
+                    messsage:"User is Registered",
+		               token:""
                 });
                 })
                 .catch(function(err){

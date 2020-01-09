@@ -6,11 +6,11 @@ var loginController = require("./controllers/loginController.js");
 require("dotenv").config();
 var app = express();
 app.use(bodyParser.json('application/json'));
-
+app.use(express.static(__dirname + "/public"));
 var multer  = require("multer");
 var storage = multer.diskStorage(
     {
-        destination: "./profile/",
+        destination: "./public/profile/",
         filename: function ( req, file, cb ){
             let date_ob = new Date().valueOf();
             cb( null, date_ob+file.originalname);
@@ -20,7 +20,10 @@ var storage = multer.diskStorage(
 //multer is used to upload the file
 var upload = multer( { storage: storage } );
 
+app.get('/api/v1/users/me/:username',loginController.getUser);
+
 app.post('/api/v1/users/profile',upload.single("profileImage"),function(req,res){
+	console.log(req.body);
     if(req.file === undefined|null){
         res.status(500);
         res.json({

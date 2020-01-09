@@ -1,8 +1,7 @@
         var user = require("../models/UserModel.js");
         const bcrypt = require("bcrypt");
         var jwt = require("jsonwebtoken");
-        function loginValidator(req,res,next){
-    
+        function loginValidator(req,res,next){    
             if(!req.body.username && !req.body.email && !req.body.phone){
                 res.send("Please enter username/phone/email");
             }
@@ -112,7 +111,32 @@
         });
         }
         
-        
+        function getUser(req,res,next){
+            user.findOne({
+                where:{username:req.params.username}
+            })
+            .then(function(result){
+                if(result===null){
+                    res.send("You have not registered, please register first");
+                }
+                else{
+                    username=result.dataValues.username;
+                    email=result.dataValues.email;
+                    phone=result.dataValues.phone;
+                    profileImage=result.dataValues.profileImage
+                    res.json({
+                        username:username,
+                        email:email,
+                        phone:phone,
+                        profileImage:profileImage
+                    });
+                
+
+            } 
+            }).catch(function(err){
+                next(err);
+            });
+        }
       
         function login(req,res,next){
             if(req.token){
@@ -121,8 +145,9 @@
                 username:req.user,
                 usertoken:req.token});
             }
+
         }
 
         module.exports={loginValidator,
-            chkLogin,jwtTokenGen,login};
+            chkLogin,jwtTokenGen,login,getUser};
         
